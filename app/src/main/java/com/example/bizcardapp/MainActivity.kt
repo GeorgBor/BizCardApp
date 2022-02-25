@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -25,6 +26,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.bizcardapp.models.Project
 import com.example.bizcardapp.ui.theme.BizCardAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -70,7 +72,7 @@ fun CreateBizCard() {
                         buttonClickedState.value = !buttonClickedState.value
                     }
                 ) {
-                    Text("Portfolio",
+                    Text("Show Portfolio",
                         style = MaterialTheme.typography.button)
 
                 }
@@ -95,17 +97,21 @@ fun ProjectContent() {
         border = BorderStroke(width = 2.dp,
             color = Color.LightGray)
     ) {
-        Portfolio(data = listOf("Project 1",
-            "Project 2",
-            "Project 3",
-            "Project 4",
-            "Project 5"))
+        Portfolio(data = listOf( Project("Project 1", "This was a nice Project"),
+            Project("Project 2", "This was a nice Project"),
+            Project("Project 3", "This was a nice Project"),
+            Project("Project 4", "This was a nice Project"),
+            Project("Project 5", "This was a nice Project"),
+            Project("Project 6", "The next Project")
+        )
+        )
+
     }
 
 }
 
 @Composable
-fun Portfolio(data: List<String>) {
+fun Portfolio(data: List<Project>) {
     LazyColumn{
         items(data) { item ->
             Card(modifier = Modifier
@@ -123,10 +129,11 @@ fun Portfolio(data: List<String>) {
 
                     Column( modifier = Modifier
                         .padding(7.dp)
+                        .clickable {println(item.name) }
                         .align(alignment = Alignment.CenterVertically)) {
 
-                        Text(text = item, fontWeight = FontWeight.Bold)
-                        Text(text = "A great Project",
+                        Text(text = item.name, fontWeight = FontWeight.Bold)
+                        Text(text = item.description,
                             style = MaterialTheme.typography.body2)
                     }
                 }
@@ -139,8 +146,12 @@ fun Portfolio(data: List<String>) {
 private fun CreateInfo() {
     Column(modifier = Modifier.padding(5.dp)) {
         Text(text = "Fuma Kotaro", style = MaterialTheme.typography.h4, color = MaterialTheme.colors.primaryVariant)
-        Text(text = "Android Compose Programmer", modifier = Modifier.padding(3.dp))
-        Text(text = "@nightNinja", modifier = Modifier.padding(3.dp), style = MaterialTheme.typography.subtitle1)
+        Row() {
+            Text(text = "Android Compose Programmer", modifier = Modifier.padding(3.dp))
+            Text(text = "@nightNinja", modifier = Modifier.padding(3.dp), style = MaterialTheme.typography.subtitle1)
+
+        }
+
     }
 }
 
@@ -154,7 +165,7 @@ private fun CreateImageProfile(modifier: Modifier = Modifier) {
         elevation = 4.dp,
         color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f)) {
 
-        Image(painter = painterResource(id = R.drawable.profile_pic),
+        Image(painter = painterResource(id = R.drawable.robot),
             contentDescription = "profile image",
             modifier = modifier.size(135.dp),
             contentScale = ContentScale.Crop)
